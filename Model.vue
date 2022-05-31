@@ -1,11 +1,18 @@
 <template>
 <div>
     <form>
-        <label> Ajouter du text </label><br>
-        <input type="text" name="name" id="name" ref="input"><br>
-        <input type="text" name="" id="">
+        <label> Le nom du demandeur ou du Service à intervenir</label><br>
+        <input type="text" name="service" id="service" ref="service"><br>
+        <label> Le nom de l'intervenant </label><br>
+        <input type="text" name="intervenant" id="intervenant" ref="intervenant"><br>
+        <label> La date de l'intervention? </label><br>
+        <input type="date" name="date" id="date" ref="date"><br>
+        <label> Identification de la panne </label><br>
+        <input type="text" name="panne" id="panne" ref="panne"><br>
+        <label> Les observations </label><br>
+        <textarea name="observation" id="observation" cols="15" rows="4"></textarea><br>
         <button  @click.prevent="clickbtn()">
-            envoie
+            Envoyer
         </button>
     </form>
 </div>    
@@ -14,8 +21,13 @@
 export default { 
 methods:{
     clickbtn(){
-        const name = this.$refs.input.value
-        console.log("We are in!!!" + name);
+        const date = this.$refs.date.value;
+        const service = this.$refs.service.value;
+        const intervenant = this.$refs.intervenant.value;
+        const panne = this.$refs.panne.value;
+        const obs = this.$refs.obs.value;
+        
+        console.log("We are in!!!");
         fetch("http://localhost:4000/submitFormToNotion",{
             method: "post",
             headers:{
@@ -23,7 +35,11 @@ methods:{
                 "Content-type":"application/json"
             },
             body: JSON.stringify({
-                name: name
+               date : date,
+               service: service,
+               intervenant: intervenant,
+               panne: panne,
+               obs: obs
             })
         }).then(res => console.log(res.json()))
         .catch((error)=>{
