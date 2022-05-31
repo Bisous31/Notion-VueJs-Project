@@ -1,5 +1,6 @@
 const express = require('express');
 const {Client} = require('@notionhq/client');
+const {v4: uuidv4} = require('uuid')
 
 var cors = require('cors');
 var bodyParser = require('body-parser');
@@ -21,7 +22,12 @@ const databaseId = process.env.NOTION_DATABASE_ID
 
 app.post('/submitFormToNotion', jsonParser, async(req, res)=>{
     //req.BODY
-    const name = req.body.name;
+    const service = req.body.service;
+    const intervenant = req.body.intervenant;
+    const date = req.body.date;
+    const panne = req.body.panne;
+    const obs = req.body.obs;
+    const userId = uuidv4()
     try{
         const response = await notion.pages.create({
             parent: { database_id: databaseId },
@@ -30,7 +36,52 @@ app.post('/submitFormToNotion', jsonParser, async(req, res)=>{
           title:[
             {
               "text": {
-                "content": name
+                "content": userId
+              }
+            }
+          ]
+        },
+        "Date": {
+          rich_text:[
+            {
+              text: {
+                content: date 
+              }
+            }
+          ]
+        },
+        "Direction ou Service": {
+          rich_text:[
+            {
+              text: {
+                content: service
+              }
+            }
+          ]
+        },
+        "Intervenant": {
+          rich_text:[
+            {
+              text: {
+                content: intervenant 
+              }
+            }
+          ]
+        },
+        "Panne": {
+          rich_text:[
+            {
+              text: {
+                content: panne 
+              }
+            }
+          ]
+        },
+        "Observations": {
+          rich_text:[
+            {
+              text: {
+                content: obs 
               }
             }
           ]
@@ -39,7 +90,6 @@ app.post('/submitFormToNotion', jsonParser, async(req, res)=>{
     })
     console.log(response);
     console.log("SUUCCES!"); 
-    console.log(name)
   }catch(error){
         console.log(error)
     }
